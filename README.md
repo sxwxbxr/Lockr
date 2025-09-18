@@ -1,55 +1,54 @@
 # Lockr
-Zero Knowledge Passwort Manager mit Tauri und Rust.
 
-## Ziel
-Passwoerter sicher speichern mit starker Kryptografie und optionaler Synchronisation ueber eigenes Backend.
+Zero Knowledge Passwort Manager mit Tauri und Rust. Diese Schablone ist startklar fuer lokale Entwicklung. UI ist minimal. Kryptografische Kernlogik liegt in `crates/core`.
 
-## Features
-* Tresor lokal mit Argon2 KDF
-* Auto Lock und Clipboard Hygiene
-* Suche und Tags
-* Passwort Generator
-* Optional Sync ueber Ende zu Ende
+## Ziele
+Sichere Speicherung. Einfache Nutzung. Keine Telemetrie. Optionales Self Hosting fuer Sync spaeter.
+
+## Funktionen in dieser Schablone
+- Tresor Datei. Lokal. Verschluesselt mit Argon2 KDF und AEAD
+- Erstellen Oeffnen Speichern
+- Einfache Eintraege mit Title Username Password Url Notes
+- CLI Testwerkzeug fuer Import und Dump
+- Unit Tests fuer Krypto Parameter und Serialisierung
+- CI Workflow fuer Build Test Lint Audit
 
 ## Tech Stack
-* Rust
-* Tauri
-* SQLCipher oder sqlite normal mit libsodium Secretbox
-* Rust Crypto
+- Rust 1.79 oder neuer
+- Tauri als Desktop Rahmen fuer UI spaeter
+- SQLCipher optional. Hier Standard sqlite mit verschluesseltem Blob
+- Crates: argon2 chacha20poly1305 zeroize secrecy serde anyhow thiserror rusqlite
 
-## Kritische Crates
-* argon2
-* rand
-* chacha20poly1305 oder libsodium
-* secrecy
-* sqlx
-* tauri
-* zeroize
+## Schnellstart
+```bash
+cargo build
+cargo test
+cargo run -p lockr-cli -- --help
+```
+UI kommt spaeter. Diese Schablone legt Fokus auf Kernlogik.
 
-## Env Variablen
-* Keine zwingen erforderlich lokal
+## Sicherheitsmodell
+- Argon2id mit moderaten Parametern fuer Desktop
+- AEAD mit ChaCha20 Poly1305 fuer Datenverschluesselung
+- Memory Zeroization fuer geheime Werte
+- Keine Netzwerk Funktion in dieser Stufe
+- Threat Model siehe SECURITY.md
 
-## Ordnerstruktur
-* src app
-* crates core crypto storage
+## Projektstruktur
+```
+Cargo.toml                Workspace
+crates/core               Kryptokern
+crates/cli                CLI Tool
+apps/desktop              Tauri Platzhalter
+.github/workflows         CI
+```
 
-## Tests
-* Krypto Property Tests
-* Fuzzing fuer Parser
-
-## CI
-* Rust stable clippy fmt test
-* Supply Chain Audit mit cargo audit
-
-## Security
-* Memory Zeroization
-* Lock Screen
-* Keine Telemetrie
-* Threat Model in docs
-
-## Roadmap
-* Mobile Client
-* Hardware Key Support
+## Roadmap kurz
+1. Vault Kern fertigstellen
+2. CLI erweitern
+3. UI in Tauri aufsetzen
+4. Sync Protokoll entwerfen
+5. Security Review
 
 ## Lizenz
 GPLv3
